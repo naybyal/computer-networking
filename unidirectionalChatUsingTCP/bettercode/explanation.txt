@@ -1,0 +1,111 @@
+-------------------------------------------
+Each step in the server program:
+
+Socket Initialization:
+
+	We create a socket using socket() function to enable communication over the network.
+
+	It's initialized with the address family (AF_INET for IPv4), socket type (SOCK_STREAM for TCP), and protocol (0 for default protocol).
+
+
+Error Checking:
+
+	We check if the socket creation was successful using ssd == -1.
+
+	If the creation fails, we print an error message and return 1 to indicate failure.
+
+
+Server Address Setup:
+
+	We initialize servaddr structure with server address and port.
+	
+	The address family is set to AF_INET, port to 33345, and IP address to INADDR_ANY to accept connections on any available interface.
+
+
+Binding:
+
+	We bind the server socket to the specified address and port using bind() function.
+
+	If binding fails, we print an error message and return 1.
+
+
+
+Listening:
+
+	We put the server socket in the listening state using listen() function.
+	
+	It specifies the maximum number of queued connections as 5.
+	
+	If listening fails, we print an error message and return 1.
+
+
+Accepting Connections:
+
+	We accept incoming connection requests from clients using accept() function.
+	
+	It blocks until a client connects and returns a new socket descriptor (netSetDestination) for the connection.
+	
+	It also fills cliaddr with the client's address information.
+
+
+Receiving Data:
+
+	We receive data from the client using recv() function and store it in recvmsg buffer.
+
+
+Processing and Displaying Data:
+
+	We process the received data as needed.
+
+	In this case, we simply print the received message to the console.
+
+
+Closing Connections:
+
+	We close the connection socket (netSetDestination) and the server socket (ssd) after communication is done.
+
+----------------------------------------
+Each step in the client program:
+
+Socket Initialization:
+
+	We create a socket using socket() function to enable communication over the network.
+
+	It's initialized with the address family (AF_INET for IPv4), socket type (SOCK_STREAM for TCP), and protocol (0 for default protocol).
+
+
+
+Error Checking:
+
+	We check if the socket creation was successful using csd == -1.
+
+	If the creation fails, we print an error message.
+
+
+Server Address Setup:
+
+	We initialize servaddr structure with the server's address and port.
+
+	The address family is set to AF_INET, port to 33345, and IP address to INADDR_LOOPBACK (loopback address representing localhost).
+
+
+Connection Establishment:
+
+	We establish a connection to the server using connect() function.
+	If the connection fails, we print an error message.
+
+
+Message Reading:
+
+	We prompt the user to enter a message to be transmitted.
+	We read the message from the user using fgets() function and store it in sendmsg buffer.
+
+
+Message Transmission:
+
+	We send the message stored in sendmsg buffer to the server using send() function.
+
+
+Closing Connection:
+
+	We close the client socket (csd) after the communication is done.
