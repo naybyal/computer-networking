@@ -24,7 +24,7 @@ int main() {
 
     // LISTEN
     if (listen(ssd, 5) == -1) 
-        perror("Failed to listen");
+        perror("Listen failed");
  
     printf("Listening to client on port 33345\n");
     
@@ -33,7 +33,7 @@ int main() {
     clilen = sizeof(cliaddr);
     netSetDestination = accept(ssd, (struct sockaddr*)&cliaddr, &clilen);
     if (netSetDestination == -1) 
-        perror("Failed to accept");
+        perror("Accept failed");
     
     // RECEIVE
     recv(netSetDestination, recvmsg, sizeof(recvmsg), 0);
