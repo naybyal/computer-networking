@@ -23,15 +23,19 @@ void main() {
 	//	CONNECT
 	connect(csd, (struct sockaddr*)&servaddr, sizeof(servaddr));
 
-	
-	//	SEND
-	printf("Reading the message to be transmitted.... \n");
-	fgets(sendmsg, 30, stdin);
-	len = strlen(sendmsg);
-	sendmsg[len-1] = '\0';
-	send(csd, sendmsg, 20, 0);
+	while(1) {
+		//	SEND
+		printf("Client: ");
+		fgets(sendmsg, 30, stdin);
+		len = strlen(sendmsg);
+		sendmsg[len-1] = '\0';
+		send(csd, sendmsg, 20, 0);
 
-	//	RECEIVE	- not implemented in unidirectional chat
+		//	RECEIVE	
+		recv(csd, recvmsg, 20, 0);
+		printf("Server: %s\n", recvmsg);
+	}
 	//	CLOSE
-	// int x = close(csd);
+	int x = close(csd);
 }
+
