@@ -74,10 +74,6 @@ int main() {
         // Wait for activity on any of the sockets
         activity = select(max_sd + 1, &readfds, NULL, NULL, NULL);
 
-        if ((activity < 0) && (errno != EINTR)) {
-            perror("select error");
-        }
-
         // If activity on server socket, then it's an incoming connection
         if (FD_ISSET(sockfd, &readfds)) {
             int new_socket;
