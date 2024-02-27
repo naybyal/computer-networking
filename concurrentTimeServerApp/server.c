@@ -29,7 +29,7 @@ int main() {
     servaddr.sin_port = htons(PORT);
 
     // Bind the socket with the server address
-    if (bind(sockfd, (const struct sockaddr *)&servaddr, sizeof(servaddr)) < 0) {
+    if (bind(sockfd, (struct sockaddr *)&servaddr, sizeof(servaddr)) < 0) {
         perror("bind failed");
         exit(EXIT_FAILURE);
     }
@@ -50,7 +50,7 @@ int main() {
         strftime(buffer, BUFFER_SIZE, "%Y-%m-%d %H:%M:%S", timeinfo);
 
         // Send system time to client
-        sendto(sockfd, (const char *)buffer, strlen(buffer), MSG_CONFIRM, (const struct sockaddr *)&cliaddr, len);
+        sendto(sockfd, (char *)buffer, strlen(buffer), MSG_CONFIRM, (struct sockaddr *)&cliaddr, len);
     }
 
     return 0;
