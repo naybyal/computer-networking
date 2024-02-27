@@ -14,8 +14,8 @@ int main() {
 
     sockid = socket(AF_INET, SOCK_DGRAM, 0);
 
-    memset(&servaddr, 0, sizeof(servaddr));
-    memset(&cliaddr, 0, sizeof(cliaddr));
+    //memset(&servaddr, 0, sizeof(servaddr));
+    //memset(&cliaddr, 0, sizeof(cliaddr));
 
     servaddr.sin_family = AF_INET;
     servaddr.sin_addr.s_addr = INADDR_ANY;

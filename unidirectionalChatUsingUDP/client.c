@@ -15,7 +15,7 @@ int main() {
 
     sockid = socket(AF_INET, SOCK_DGRAM, 0);
 
-    memset(&servaddr, 0, sizeof(servaddr));
+    //memset(&servaddr, 0, sizeof(servaddr));
 
     servaddr.sin_family = AF_INET;
     servaddr.sin_port = htons(PORT);
@@ -24,6 +24,10 @@ int main() {
     while (1) {
         printf("Client: ");
         fgets(buffer, BUFFER_SIZE, stdin);
+        if (strncmp(buffer, "bye", 3) == 0) {
+            printf("Exiting...\n");
+            break;
+        }
         sendto(sockid, (const char *)buffer, strlen(buffer), MSG_CONFIRM, (const struct sockaddr *)&servaddr, sizeof(servaddr));
     }
 
