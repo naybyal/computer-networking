@@ -26,6 +26,7 @@ void main() {
 
 	clilen = sizeof(cliaddr);
 
+	// new socket descriptor
 	int nsd = accept(ssd, (struct sockaddr*)&cliaddr, &clilen);
 	recv(nsd, recvmsg, BUFFER_SIZE, 0);
 
