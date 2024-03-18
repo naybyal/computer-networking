@@ -8,29 +8,33 @@
 #define BUFFER_SIZE 30
 
 void main() {
-	int ssd, len, clilen;
+	int ssd, clilen;
 	char recvmsg[BUFFER_SIZE], sendmsg[BUFFER_SIZE];
 	struct sockaddr_in cliaddr, servaddr;
-
+	
+	//	socket
 	ssd = socket(AF_INET, SOCK_STREAM, 0);
 
 	servaddr.sin_family = AF_INET;
 	servaddr.sin_port = htons(5600);
 	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
 
-	len = sizeof(servaddr);
+	//	bind
+	bind(ssd, (struct sockaddr*)&servaddr, sizeof(servaddr));
 
-	bind(ssd, (struct sockaddr*)&servaddr, len);
-
+	//	listen
 	listen(ssd,5);
 
 	clilen = sizeof(cliaddr);
-
-	// new socket descriptor
-	int nsd = accept(ssd, (struct sockaddr*)&cliaddr, &clilen);
-	recv(nsd, recvmsg, BUFFER_SIZE, 0);
+	// client socket descriptor
+	// 	accept
+	int csd = accept(ssd, (struct sockaddr*)&cliaddr, &clilen);
+	
+	//	receive
+	recv(csd, recvmsg, BUFFER_SIZE, 0);
 
 	printf("%s\n", recvmsg);
-
+	
+	//	close
 	close(ssd);
 }
