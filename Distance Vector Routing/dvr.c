@@ -48,5 +48,9 @@ int main() {
     int i, j;
     printf("Number of nodes: ");
     scanf("%d", &n);
-    read
+    readCostMatrix();
+    calcRoutingTable();
+    displayRoutes();
+    return 0;
+}
 
