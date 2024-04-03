@@ -7,6 +7,8 @@
 #define MAX_FILENAME_LENGTH 100
 #define MAX_BUFFER_SIZE 300
 
+	//	server
+
 int main() {
     int serversockfd, newserversockfd, clilen, n, f;
     char line[MAX_FILENAME_LENGTH], fline[MAX_BUFFER_SIZE];

@@ -15,7 +15,6 @@ int main() {
 
     // Creating socket file descriptor
     sockfd = socket(AF_INET, SOCK_DGRAM, 0);
-    memset(&servaddr, 0, sizeof(servaddr));
 
     // Filling server information
     servaddr.sin_family = AF_INET;
