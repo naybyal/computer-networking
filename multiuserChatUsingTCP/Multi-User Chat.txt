@@ -1,0 +1,143 @@
+server side
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#include <pthread.h>
+#include <sys/socket.h>
+
+pthread_mutex_t mutex;
+int clients[20];
+int n =0;
+void sendtoall(char *msg,int curr)
+{
+	int i;
+	pthread_mutex_lock(&mutex);
+	for(i=0;i<n;i++)
+	{
+		if(clients[i]!=curr)
+		{
+			if(send(clients[i],msg,strlen(msg),0)<0)
+			{
+				printf("sending failure\n");
+				continue;
+			}
+		}
+	}
+	pthread_mutex_unlock(&mutex);
+}
+void *receive_message(void *csd)
+{
+	int sd= *((int *)csd);
+	char msg[500];
+	int len;
+	while((len=recv(sd,msg,500,0))>0)
+	{
+		msg[len]='\0';
+		sendtoall(msg,sd);
+	}
+}
+int main()
+{
+	struct sockaddr_in servaddr;
+	pthread_t recvt;
+	int sd=0,csd=0;
+	servaddr.sin_family = AF_INET;
+	servaddr.sin_addr.s_addr = INADDR_ANY;
+	servaddr.sin_port = htons(8880);
+	sd = socket(AF_INET, SOCK_STREAM, 0);
+	printf("server started");
+	bind(sd, (struct sockaddr *)&servaddr, sizeof(servaddr));
+	listen(sd, 5);
+	
+	while(1)
+	{
+		csd=accept(sd,(struct sockaddr*)NULL,NULL);
+		pthread_mutex_lock(&mutex);
+		clients[n]=csd;
+		n++;
+		pthread_create(&recvt,NULL,(void *)receive_message,&csd);
+		pthread_mutex_unlock(&mutex);
+	}
+	return 0;
+}
+
+client side
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#include <pthread.h>
+#include <sys/socket.h>
+char msg[100];
+void *recieve_message(void *my_sock)
+{
+	int sd=*((int*)my_sock);
+	int len;
+	while((len=recv(sd,msg,500,0))>0)
+	{
+		msg[len]='\0';
+		fputs(msg,stdout);
+	}
+}
+int main(int argc,char *argv[])
+{
+	pthread_t recvt;
+	int sd;
+	char sendmsg[100];
+	struct sockaddr_in servaddr;
+	char client_name[100];
+	strcpy(client_name,argv[1]);
+	sd = socket(AF_INET, SOCK_STREAM, 0);
+	servaddr.sin_family = AF_INET;
+	servaddr.sin_addr.s_addr = INADDR_ANY;
+	servaddr.sin_port = htons(8880);
+	connect(sd, (struct sockaddr *)&servaddr, sizeof(servaddr));
+	pthread_create(&recvt,NULL,(void *)recieve_message,&sd);
+	while(fgets(msg,100,stdin)>0)
+	{
+		strcpy(sendmsg,client_name);
+		strcat(sendmsg,":");
+		strcat(sendmsg,msg);
+		send(sd,sendmsg,strlen(sendmsg),0);
+	}
+	pthread_join(recvt,NULL);
+	close(sd);
+	return 0;
+}
+
+output
+gcc server.c -o sr -pthread
+./sr
+
+gcc client.c -o cl -pthread(new window)
+./cl client1
+./cl client2(new window)
+./cl client3(new window)
+./cl client4(new window)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
