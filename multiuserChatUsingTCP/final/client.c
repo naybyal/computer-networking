@@ -6,9 +6,10 @@
 #include <sys/socket.h>
 #include <pthread.h>
 #include <sys/socket.h>
+
 char msg[100];
-void *recieve_message(void *my_sock)
-{
+
+void *recieve_message(void *my_sock) {
 	int sd=*((int*)my_sock);
 	int len;
 	while((len=recv(sd,msg,500,0))>0)
@@ -17,13 +18,12 @@ void *recieve_message(void *my_sock)
 		fputs(msg,stdout);
 	}
 }
-int main(int argc,char *argv[])
-{
+
+int main(int argc,char *argv[]) {
 	pthread_t recvt;
 	int sd;
-	char sendmsg[100];
+	char sendmsg[100], client_name[100];
 	struct sockaddr_in servaddr;
-	char client_name[100];
 	strcpy(client_name,argv[1]);
 	sd = socket(AF_INET, SOCK_STREAM, 0);
 	servaddr.sin_family = AF_INET;

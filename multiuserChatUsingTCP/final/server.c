@@ -9,6 +9,7 @@
 
 int clients[20];
 int n =0;
+
 void sendtoall(char *msg,int curr) {
 	int i;
 	for(i=0;i<n;i++) {
@@ -20,6 +21,7 @@ void sendtoall(char *msg,int curr) {
 		}
 	}
 }
+
 void *receive_message(void *csd) {
 	int sd= *((int *)csd);
 	char msg[500];
@@ -29,6 +31,7 @@ void *receive_message(void *csd) {
 		sendtoall(msg,sd);
 	}
 }
+
 int main() {
 	struct sockaddr_in servaddr;
 	pthread_t recvt;
