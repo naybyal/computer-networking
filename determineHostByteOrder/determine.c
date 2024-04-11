@@ -1,3 +1,6 @@
+//  Author  :   Nabiel
+//  Program referenced from the book "Unix Network Programming : The Sockets Networking API (Vol.1)" by W. Richard Stevens and Kevin Kohler
+
 #include "./unp.h"
 // requires netinet/sctp.h 
 //  install it by running the command `sudo apt install libsctp-dev` in the Terminal
@@ -7,7 +10,6 @@ int main(int argc, char **argv) {
         short s;
         char c[sizeof(short)];
     } un;
-
     /*
         The line un.s = 0x0102; sets the value of the short integer s to 0x0102, which is equal to 258 in decimal.
         If the system is big-endian, the first byte of s will be 0x01 and the second byte will be 0x02. 
