@@ -15,7 +15,8 @@ int main(int argc, char **argv) {
         If the system is big-endian, the first byte of s will be 0x01 and the second byte will be 0x02. 
         If the system is little-endian, the first byte of s will be 0x02 and the second byte will be 0x01.
 
-        The reason the decimal value 258 is used in this code is because it is a convenient value that can be used to demonstrate the byte order of a short integer on both big-endian and little-endian systems. 
+        The reason the decimal value 258 is used in this code is because it is a convenient value that can be used to demonstrate 
+        the byte order of a short integer on both big-endian and little-endian systems. 
         The hexadecimal value 0x0102 is easy to recognize in both byte orders, making it a useful value for this purpose.
     */
     un.s = 0x0102;
