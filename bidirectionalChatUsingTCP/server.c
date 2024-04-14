@@ -26,18 +26,18 @@ void main() {
 	
 	//	ACCEPT
 	clilen = sizeof(cliaddr);
-	int netSetDestination = accept(ssd, (struct sockaddr*)&cliaddr, &clilen);
+	int newSocketDescriptor = accept(ssd, (struct sockaddr*)&cliaddr, &clilen);
 	printf("Client says... \n");
 
 	while(1) {
 		//	RECEIVE
-		recv(netSetDestination, recvmsg, 20, 0);
+		recv(newSocketDescriptor, recvmsg, 20, 0);
 		printf("Client: %s\n", recvmsg);
 
 		//	SEND
 		printf("Server: ");
 		fgets(sendmsg, 30, stdin);
-		send(netSetDestination, sendmsg, 20, 0);
+		send(newSocketDescriptor, sendmsg, 20, 0);
 	}
 	//	CLOSE	
 	int x = close(ssd);

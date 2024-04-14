@@ -9,11 +9,11 @@
 #define BUFFER_SIZE 1024
 
 int main() {
-    int sockid;
+    int sockfd;
     char buffer[BUFFER_SIZE];
     struct sockaddr_in servaddr;
 
-    sockid = socket(AF_INET, SOCK_DGRAM, 0);
+    sockfd = socket(AF_INET, SOCK_DGRAM, 0);
 
     //memset(&servaddr, 0, sizeof(servaddr));
 
@@ -28,10 +28,10 @@ int main() {
             printf("Exiting...\n");
             break;
         }
-        sendto(sockid, (const char *)buffer, strlen(buffer), MSG_CONFIRM, (const struct sockaddr *)&servaddr, sizeof(servaddr));
+        sendto(sockfd, (const char *)buffer, strlen(buffer), MSG_CONFIRM, (const struct sockaddr *)&servaddr, sizeof(servaddr));
     }
 
-    close(sockid);
+    close(sockfd);
     return 0;
 }
 

@@ -7,7 +7,9 @@
 #include <netinet/in.h>
 
 #define BUFFER_SIZE 1024
+
     /*  CLIENT SIDE */
+
 int main() {
     int sockfd, len;
     struct sockaddr_in server, client;

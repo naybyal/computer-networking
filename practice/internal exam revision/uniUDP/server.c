@@ -1,50 +1,35 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#include<stdio.h>
+#include<string.h>
+#include<sys/types.h>
+#include<sys/socket.h>
+#include<netinet/in.h>
 
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-
+#define PORT 33345
 #define BUFFER_SIZE 1024
 
 int main() {
-    int sockfd, length;
+    int sockfd;
+    struct sockaddr_in servaddr, cliaddr;
     char buffer[BUFFER_SIZE];
-    struct sockaddr_in server, client;
 
-    //  socket
     sockfd = socket(AF_INET, SOCK_DGRAM, 0);
-    if (sockfd < 0) {
-        perror("Error creating socket");
-        exit(1);
-    }
 
-    server.sin_family = AF_INET;
-    server.sin_port = htons(5600);
-    server.sin_addr.s_addr = htonl(INADDR_ANY);
-    
-    //  bind
-    if (bind(sockfd, (const struct sockaddr*)&server, sizeof(server)) < 0) {
-        perror("Error binding socket");
-        exit(1);
-    }
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_addr.s_addr = INADDR_ANY;
+    servaddr.sin_port = htons(PORT);
 
-    length = sizeof(client);
+    bind(sockfd, (const struct sockaddr *)&servaddr, sizeof(servaddr));
 
-    //  send / receive
+    int len, n;
+    len = sizeof(cliaddr);
+
     while (1) {
-        // fflush(stdin);
-        recvfrom(sockfd, (const char *)buffer, BUFFER_SIZE, MSG_WAITALL, (struct sockaddr*)&client, &length);
-        // buffer[len-1] = '\0';
+        n = recvfrom(sockfd, (char *)buffer, BUFFER_SIZE, MSG_WAITALL, (struct sockaddr *)&cliaddr, &len);
+        buffer[n] = '\0';
+        
         printf("Client : %s", buffer);
-    } 
-
-    //  close
-    if (close(sockfd) < 0) {
-        perror("Error closing socket");
-        exit(1);
     }
-    
+
     return 0;
 }
+
