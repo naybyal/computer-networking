@@ -38,12 +38,13 @@ int main() {
     pthread_t receiver;
     int sockfd, csd;
     struct sockaddr_in server;
+    
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
     server.sin_family = AF_INET;
     server.sin_port = htons(5600);
     server.sin_addr.s_addr = INADDR_ANY;
 
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
     bind(sockfd, (struct sockaddr*)&server, sizeof(server));
     listen(sockfd, 5);
 
