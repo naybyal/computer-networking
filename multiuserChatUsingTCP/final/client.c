@@ -5,7 +5,7 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <pthread.h>
-#include <sys/socket.h>
+#include <sys/types.h>
 
 char msg[100];
 
