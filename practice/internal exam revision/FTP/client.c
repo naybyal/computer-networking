@@ -9,11 +9,11 @@
 
 
 #define MAX_FILENAME_LENGTH 40
-#define MAX_BUFER_SIZE 1024
+#define MAX_BUFFER_SIZE 1024
 
 void main() {
     int sockfd, n, res;
-    char fname[MAX_FILENAME_LENGTH], buffer[MAX_BUFER_SIZE];
+    char fname[MAX_FILENAME_LENGTH], buffer[MAX_BUFFER_SIZE];
     struct sockaddr_in server;
 
     server.sin_family = AF_INET;
@@ -32,7 +32,7 @@ void main() {
     write(sockfd, fname, n);
 
     //  GET response from the server
-    res = read(sockfd, buffer, MAX_BUFER_SIZE);
+    res = read(sockfd, buffer, MAX_BUFFER_SIZE);
     printf("\nContents of the file are... \n\n");
     printf("%s", buffer);
 
