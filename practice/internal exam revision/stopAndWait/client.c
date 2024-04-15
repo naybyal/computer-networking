@@ -13,7 +13,7 @@ void main() {
     
     server.sin_family = AF_INET;
     server.sin_port = htons(5600);
-    server.sin_addr.s.addr = INADDR_ANY;
+    server.sin_addr.s_addr = INADDR_ANY;
 
     int n = -1;
 
