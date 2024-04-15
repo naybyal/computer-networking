@@ -18,7 +18,7 @@ void main() {
 	servaddr.sin_port = htons(5600);
 	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
 
-	bind(sockfd, (struct sockadd*)&servaddr, sizeof(servaddr));
+	bind(sockfd, (struct sockaddr*)&servaddr, sizeof(servaddr));
 	
 	int len = sizeof(cliaddr);
 	int frames[100], n;
@@ -30,7 +30,7 @@ void main() {
 	int p, ack;
 	
 	while (1) {
-		recvfrom(sockfd, &p, sizeof(n),0,(struct sockadd*)&cliaddr, &len);
+		recvfrom(sockfd, &p, sizeof(n),0,(struct sockaddr*)&cliaddr, &len);
 		if (p == -99)
 			break;
 		printf("\nReceived frame %d ", p);
