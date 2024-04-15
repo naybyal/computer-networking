@@ -34,7 +34,7 @@ void main() {
     //  GET response from the server
     res = read(sockfd, buffer, MAX_BUFFER_SIZE);
     printf("\nContents of the file are... \n\n");
-    printf("%s", buffer);
+    printf("%s\n", buffer);
 
     close(sockfd);
 }

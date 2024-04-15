@@ -38,7 +38,7 @@ void main() {
         n = read(req, buffer, MAX_BUFFER_SIZE);
 
         printf("\nThe contents of the file are...\n\n");
-        printf("%s", buffer);
+        printf("%s\n", buffer);
 
         write(newsockfd, buffer, n);
 
