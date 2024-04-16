@@ -51,6 +51,7 @@ int main() {
     while (1) {
         csd = accept(sockfd, (struct sockaddr*)NULL, NULL);
         clients[n++] = csd;
-        pthread_create(&receiver, NULL, (void *)receiver, &csd);
+        pthread_create(&receiver, NULL, (void *)receive, &csd);
     }
+    return 0;
 }

@@ -15,7 +15,7 @@ void *receive(void *mySocket) {
     int sockfd = *((int *)mySocket);
     int len;
 
-    while ((len=recv(sockfd, msg, SIZE, 0) > 0)) {
+    while ((len = recv(sockfd, msg, SIZE, 0)) > 0) {
         msg[len] = '\0';
         fputs(msg, stdout);
     }
