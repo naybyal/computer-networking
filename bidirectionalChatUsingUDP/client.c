@@ -7,7 +7,7 @@
 #define PORT 33345
 #define SERVER_IP "127.0.0.1"
 #define BUFFER_SIZE 1024
-
+//  Client side
 int main() {
     int sockfd;
     char buffer[BUFFER_SIZE];

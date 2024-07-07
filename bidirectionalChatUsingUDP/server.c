@@ -7,7 +7,7 @@
 
 #define PORT 33345
 #define BUFFER_SIZE 1024
-
+//  Server side
 int main() {
     int sockfd;
     struct sockaddr_in servaddr, cliaddr;
