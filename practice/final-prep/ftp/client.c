@@ -38,4 +38,3 @@ void main() {
     printf("The contents of the file are:\n\n%s", buffer);
     close(sockfd);
 }
-

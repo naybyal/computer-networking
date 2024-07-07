@@ -21,7 +21,6 @@ void main() {
 
     bind(server_sockfd, (struct sockaddr*)&server, sizeof(server));
     listen(server_sockfd, 5);
-
     while (1) {
         client_len = sizeof(client);
         client_sockfd = accept(server_sockfd, (struct sockaddr*)&client, &client_len);

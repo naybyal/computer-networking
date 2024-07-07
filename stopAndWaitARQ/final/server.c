@@ -7,13 +7,11 @@
 #include<sys/socket.h>
 #include<unistd.h>
 
+// server
 void main() {
-	printf("\nWaiting for client.... \n");
 	struct sockaddr_in servaddr, cliaddr;
 	int sockfd = socket(AF_INET, SOCK_DGRAM, 0);
 	
-	memset(&servaddr, 0 , sizeof(servaddr));
-	memset(&cliaddr, 0 , sizeof(cliaddr));
 	servaddr.sin_family = AF_INET;
 	servaddr.sin_port = htons(5600);
 	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
