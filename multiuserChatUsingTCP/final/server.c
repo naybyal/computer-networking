@@ -3,61 +3,77 @@
 #include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>
-#include <sys/socket.h>
 #include <pthread.h>
-#include <sys/socket.h>#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <arpa/inet.h>
-#include <sys/socket.h>
-#include <pthread.h>
-#include <sys/types.h>
 
-char msg[100];
+#define MAX_CLIENTS 20
+#define BUFFER_SIZE 500
+#define PORT 8880
 
-int clients[20];
-int n =0;
+int clients[MAX_CLIENTS];
+int client_count = 0;
+pthread_mutex_t clients_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-void sendtoall(char *msg,int curr) {
-	int i;
-	for(i=0;i<n;i++) {
-		if(clients[i]!=curr) {
-			if(send(clients[i],msg,strlen(msg),0)<0) {
-				printf("sending failure\n");
-				continue;
-			}
-		}
-	}
+void send_to_all(char *msg, int current) {
+    pthread_mutex_lock(&clients_mutex);
+    for (int i = 0; i < client_count; ++i) {
+        if (clients[i] != current) {
+            send(clients[i], msg, strlen(msg), 0);
+        }
+    }
+    pthread_mutex_unlock(&clients_mutex);
 }
 
-void *receive_message(void *csd) {
-	int sd= *((int *)csd);
-	char msg[500];
-	int len;
-	while((len=recv(sd,msg,500,0))>0) {
-		msg[len]='\0';
-		sendtoall(msg,sd);
-	}
+void *receive_message(void *client_sock) {
+    int sd = *((int *)client_sock);
+    char msg[BUFFER_SIZE];
+    int len;
+    while ((len = recv(sd, msg, BUFFER_SIZE - 1, 0)) > 0) {
+        msg[len] = '\0';
+        send_to_all(msg, sd);
+    }
+    close(sd);
+    pthread_mutex_lock(&clients_mutex);
+    for (int i = 0; i < client_count; ++i) {
+        if (clients[i] == sd) {
+            clients[i] = clients[client_count - 1];
+            client_count--;
+            break;
+        }
+    }
+    pthread_mutex_unlock(&clients_mutex);
+    return NULL;
 }
 
 int main() {
-	struct sockaddr_in servaddr;
-	pthread_t recvt;
-	int sd,csd;
-	servaddr.sin_family = AF_INET;
-	servaddr.sin_addr.s_addr = INADDR_ANY;
-	servaddr.sin_port = htons(8880);
-	sd = socket(AF_INET, SOCK_STREAM, 0);
-	printf("server started");
-	bind(sd, (struct sockaddr *)&servaddr, sizeof(servaddr));
-	listen(sd, 5);
-	while(1) {
-		csd=accept(sd,(struct sockaddr*)NULL,NULL);
-		clients[n]=csd;
-		n++;
-		pthread_create(&recvt,NULL,(void *)receive_message,&csd);
+    struct sockaddr_in servaddr;
+    int server_sock, client_sock;
 
-	}
-	return 0;
+    server_sock = socket(AF_INET, SOCK_STREAM, 0);
+
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_addr.s_addr = INADDR_ANY;
+    servaddr.sin_port = htons(PORT);
+
+    bind(server_sock, (struct sockaddr *)&servaddr, sizeof(servaddr));
+    listen(server_sock, 5);
+
+    printf("Server started on port %d\n", PORT);
+
+    while (1) {
+        client_sock = accept(server_sock, NULL, NULL);
+
+        pthread_mutex_lock(&clients_mutex);
+        if (client_count < MAX_CLIENTS) {
+            clients[client_count++] = client_sock;
+            pthread_t recv_thread;
+            pthread_create(&recv_thread, NULL, receive_message, &client_sock);
+        } else {
+            close(client_sock);
+        }
+        pthread_mutex_unlock(&clients_mutex);
+    }
+
+    close(server_sock);
+    return 0;
 }
+

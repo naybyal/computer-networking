@@ -14,20 +14,14 @@ int main() {
     char buffer[BUFFER_SIZE];
 
     // Create socket
-    if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-        perror("socket creation failed");
-        exit(EXIT_FAILURE);
-    }
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
     servaddr.sin_family = AF_INET;
     servaddr.sin_port = htons(PORT);
     servaddr.sin_addr.s_addr = inet_addr(SERVER_IP);
 
     // Connect to server
-    if (connect(sockfd, (struct sockaddr *)&servaddr, sizeof(servaddr)) < 0) {
-        perror("connection failed");
-        exit(EXIT_FAILURE);
-    }
+    connect(sockfd, (struct sockaddr *)&servaddr, sizeof(servaddr));
 
     while (1) {
         printf("Client: ");

@@ -6,7 +6,6 @@
 #include<sys/types.h>
 #include<sys/socket.h>
 #include<unistd.h>
-
 // server
 void main() {
 	struct sockaddr_in servaddr, cliaddr;
