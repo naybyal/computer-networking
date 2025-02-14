@@ -49,7 +49,7 @@ int main() {
         generateFibonacciArray(numberOfTerms);
 
         // Send Fibonacci array to client
-        sendto(sockfd, fibo, numberOfTerms * sizeof(int), MSG_CONFIRM, (const struct sockaddr *)&cliaddr, len);
+        sendto(sockfd, fibo, BUFFER_SIZE, MSG_CONFIRM, (const struct sockaddr *)&cliaddr, len);
     }
 
     return 0;
