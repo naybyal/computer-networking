@@ -42,13 +42,13 @@ int main() {
     len = sizeof(cliaddr);
     int numberOfTerms;
     while (1) {
-        // Receive message from client
+        // Receive number of terms(of Fibonacci series) from client
         n = recvfrom(sockfd, &numberOfTerms, sizeof(numberOfTerms), MSG_WAITALL, (struct sockaddr *)&cliaddr, &len);
         printf("Client requested %d terms\n", numberOfTerms);
 
         generateFibonacciArray(numberOfTerms);
 
-        // Send message to client
+        // Send Fibonacci array to client
         sendto(sockfd, fibo, numberOfTerms * sizeof(int), MSG_CONFIRM, (const struct sockaddr *)&cliaddr, len);
     }
 
