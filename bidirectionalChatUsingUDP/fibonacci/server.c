@@ -7,11 +7,25 @@
 
 #define PORT 33345
 #define BUFFER_SIZE 1024
-//  Server side
+
+int fibo[BUFFER_SIZE];
+
+void generateFibonacciArray(int length) {
+    if (length == 1) {
+        fibo[0] = 0;
+    } else if (length >= 2) {
+        fibo[0] = 0;
+        fibo[1] = 1;
+        for (int i = 2; i < length; i++) {
+            fibo[i] = fibo[i - 1] + fibo[i - 2];
+        }
+    }
+}
+
+// Server side
 int main() {
     int sockfd;
     struct sockaddr_in servaddr, cliaddr;
-    char buffer[BUFFER_SIZE];
 
     // Creating socket file descriptor
     sockfd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -26,19 +40,17 @@ int main() {
 
     int len, n;
     len = sizeof(cliaddr);
-
+    int numberOfTerms;
     while (1) {
         // Receive message from client
-        n = recvfrom(sockfd, (char *)buffer, BUFFER_SIZE, MSG_WAITALL, (struct sockaddr *)&cliaddr, &len);
-        buffer[n] = '\0';
-        printf("Client: %s\n", buffer);
+        n = recvfrom(sockfd, &numberOfTerms, sizeof(numberOfTerms), MSG_WAITALL, (struct sockaddr *)&cliaddr, &len);
+        printf("Client requested %d terms\n", numberOfTerms);
+
+        generateFibonacciArray(numberOfTerms);
 
         // Send message to client
-        printf("Server: ");
-        fgets(buffer, BUFFER_SIZE, stdin);
-        sendto(sockfd, (const char *)buffer, strlen(buffer), MSG_CONFIRM, (const struct sockaddr *)&cliaddr, len);
+        sendto(sockfd, fibo, numberOfTerms * sizeof(int), MSG_CONFIRM, (const struct sockaddr *)&cliaddr, len);
     }
 
     return 0;
 }
-
